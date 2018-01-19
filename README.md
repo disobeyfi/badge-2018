@@ -1,5 +1,7 @@
 # Sources for Disobey 2018 badge
 
+![Image of USER badge](https://raw.githubusercontent.com/disobeyfi/badge-2018/master/web/badge.jpg)
+
 Disobey Badge is an electronic device that was given for all Disobey visitors. It is part of the badge challenge.
 The badge uses most of it's time on sleeping and playing simple animations using its leds as a 14-pixel display.
 It also includes a game in which the user has to collect keys from all 9 different badge types, to obtain access to further puzzles on the "cloud". Badge is designed to resemble Nintendo style gamepad, and behaves as one when it's plugged to a computer using USB.
@@ -51,11 +53,13 @@ Animations play for a random time. After this RTC wakeup interrupt is set up, an
 
 This repo also features source for a SBUS-to-USB adapter, which can be used (with an appropriate RX hardware such as XM+ or D4R-II) to remotely connect Taranis or Futaba (untested) RC controller to a computer as a game controller.
 
-The resulting adapter controller works with atleast LiftOff quadrotor game/simulator.
+The resulting adapter controller works with atleast LiftOff quadrotor game/simulator. Adapter currently provides all 16 SBUS channels to the computer as axes.
 
 You can program this to your badge by running "make taranis.stlink-flash"
 
-(Taranis receiver support is not tested at all on final badge HW, fix will come soon..)
+#### Hardware modification
+To prepare your badge for SBUS adapter usage, you'll just need to solder some wires from your RX to the badge.
+![Wiring diagram](https://raw.githubusercontent.com/disobeyfi/badge-2018/master/web/badge-sbus.jpg)
 
 ## Credits
 

@@ -57,22 +57,8 @@ $(BADGENAME9).elf: 		$(BADGEDEPS) keys/keydata.c lights.c
 $(BADGENAME_PROTO2).elf: 	$(BADGEDEPS) keys/keydata.c lights.c
 	$(PREFIX)gcc  -Wl,-Map=$@.map  $^ -o $@ $(LINKFLAGS) $(OBJFLAGS) -DBADGETYPE0 -DLEDPROTO2
 
-
-
-proto1test.elf: proto1test.o debugf.o utils.o buttons.o lights.o
-	$(PREFIX)gcc  -Wl,-Map=$@.map  $^ -o $@ $(LINKFLAGS)
-
-proto2test.elf: proto2test.o debugf.o utils.o buttons.o lights.o
-	$(PREFIX)gcc  -Wl,-Map=$@.map  $^ -o $@ $(LINKFLAGS)
-
-pwmtest.elf: pwmtest.o debugf.o utils.o buttons.o lights.o
-	$(PREFIX)gcc  -Wl,-Map=$@.map  $^ -o $@ $(LINKFLAGS)
-
-usbtest.elf: usbtest.o debugf.o utils.o buttons.o lights.o
-	$(PREFIX)gcc  -Wl,-Map=$@.map  $^ -o $@ $(LINKFLAGS)
-
-taranis.elf: taranis.o debugf.o utils.o buttons.o lights.o
-	$(PREFIX)gcc  -Wl,-Map=$@.map  $^ -o $@ $(LINKFLAGS)
+taranis.elf: taranis.o debugf.o utils.o
+	$(PREFIX)gcc  -Wl,-Map=$@.map  $^ -o $@ $(LINKFLAGS) $(OBJFLAGS)
 
 
 
