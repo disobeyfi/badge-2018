@@ -136,7 +136,7 @@ const struct usb_endpoint_descriptor hid_endpoint = {
 	.bEndpointAddress = 0x81,
 	.bmAttributes = USB_ENDPOINT_ATTR_INTERRUPT,
 	.wMaxPacketSize = sizeof(hidmessage_t),
-	.bInterval = 0x20,
+	.bInterval = 0x1,
 };
 
 const struct usb_interface_descriptor hid_iface = {
@@ -183,8 +183,12 @@ static const char *usb_strings[] = {
 
 uint8_t hack_flag = 0;
 
-static int hid_control_request(usbd_device *dev, struct usb_setup_data *req, uint8_t **buf, uint16_t *len,
-			void (**complete)(usbd_device *, struct usb_setup_data *))
+static enum usbd_request_return_codes hid_control_request(usbd_device *dev,
+	struct usb_setup_data *req,
+	uint8_t **buf,
+	uint16_t *len,
+	usbd_control_complete_callback *complete)
+
 {
 	(void)complete;
 	(void)dev;
@@ -192,7 +196,7 @@ static int hid_control_request(usbd_device *dev, struct usb_setup_data *req, uin
 	if((req->bmRequestType != 0x81) ||
 	   (req->bRequest != USB_REQ_GET_DESCRIPTOR) ||
 	   (req->wValue != 0x2200))
-		return 0;
+		return USBD_REQ_NOTSUPP;
 
 	/* Handle the HID report descriptor. */
 	*buf = (uint8_t *)hid_report_descriptor;
@@ -200,7 +204,7 @@ static int hid_control_request(usbd_device *dev, struct usb_setup_data *req, uin
 
 	hack_flag = 1;
 
-	return 1;
+	return USBD_REQ_HANDLED;
 }
 
 static void hid_set_config(usbd_device *dev, uint16_t wValue)
@@ -225,25 +229,6 @@ static void hid_set_config(usbd_device *dev, uint16_t wValue)
 void device_work(void)
 {
 	hidmessage_t msg;
-
-#if 0
-	int xd = (sbusChannelData[1] - 982) / 40;
-
-	if (xd < -50)
-		xd = -50;
-	else if (xd > 50)
-		xd = 50;
-
-
-	int yd = -(sbusChannelData[2] - 982) / 40;
-	if (yd < -50)
-		yd = -50;
-	else if (yd > 50)
-		yd = 50;
-
-	buf[1] = xd;
-	buf[2] = yd;
-#endif
 
 	for (int i = 0; i < 16; i++)
 	{
@@ -285,6 +270,12 @@ static void sbus_setup(void)
 	//USART_CR2(USART3) |= USART_CR2_MSBFIRST;
 
 	usart_enable(USART3);
+
+	for (int i = 0; i < 16; i++)
+	{
+		sbusChannelData[i] = 1024; // middle pos
+	}
+
 }
 
 
